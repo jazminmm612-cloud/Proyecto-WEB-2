@@ -554,7 +554,6 @@ main {
   }
 }
 
-/* Mantener compatibilidad con tu media query existente */
 @media (max-width: 1440px) and (min-width: 1024px) {
   .contenedor-general {
     width: 90%;
