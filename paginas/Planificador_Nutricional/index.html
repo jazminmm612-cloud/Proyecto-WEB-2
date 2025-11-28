@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Nutricional | Calcula tu IMC y Calorías Diarias</title>
+    <meta name="description"
+        content="Completa nuestro formulario nutricional y descubre tus calorías diarias, IMC y requerimientos según tu objetivo: bajar, mantener o subir de peso.">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Planificador Nutricional | Calcula tu IMC y Calorías">
+    <meta property="og:description" content="Descubre tu IMC, calorías diarias y plan nutricional personalizado.">
+    <meta property="og:image" content="/img/preview.jpg">
+    <meta property="og:url" content="https://tusitio.com/paginas/planificador-nutricional/">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Planificador Nutricional | Calcula tu IMC y Calorías">
+    <meta name="twitter:description" content="Calcula tu IMC, metabolismo y requerimiento calórico diario.">
+    <meta name="twitter:image" content="/img/preview.jpg">
+
+
+    <link rel="stylesheet" href="/css/header&footer.css">
+    <link rel="stylesheet" href="/css/formulario.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Formulario Nutricional",
+  "description": "Calcula tu IMC, metabolismo basal y requerimiento calórico diario con nuestro planificador gratuito.",
+  "url": "https://tusitio.com/paginas/planificador-nutricional/",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "All",
+  "publisher": {
+    "@type": "Organization",
+    "name": "TuEmpresa",
+    "url": "https://tusitio.com",
+    "logo": "https://tusitio.com/img/logo.png"
+  }
+}
+</script>
+
+</head>
+
+<body>
+    <div class="main-content">
+
+        <!--HEADER-->
+        <header>
+            <a href="">
+            <div class="logo"><img src="/img/logo2.png" alt="Logo de la empresa de dietas" loading="lazy"></div>
+            </a>
+            <div>
+                <nav>
+                    <ul>
+                        <li class="fondo"><a href="/">Conocenos</a></li>
+                        <li class="fondo2"><a href="/paginas/Planificador_Nutricional">Planificador Nutricional</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Botón hamburguesa -->
+        <div class="menu-toggle" id="menu-toggle">
+            &#9776; <!-- icono de 3 líneas -->
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <nav>
+                <a href="/" class="selected">
+                    <svg class="img" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        stroke="#ffffff">
+                        <path d="M1 6V15H6V11C6 9.89543 6.89543 9 8 9C9.10457 9 10 9.89543 10 11V15H15V6L8 0L1 6Z"
+                            fill="#ffffff" />
+                    </svg>
+                    <span>Conocenos</span>
+                </a>
+
+                <a href="/paginas/Planificador_Nutricional/" class="selected">
+                    <svg class="img" version="1.1" id="Uploaded to svgrepo.com" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve"
+                        fill="#ffffff" stroke="#ffffff">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <style type="text/css">
+                                .blueprint_een {
+                                    fill: #ffffff;
+                                }
+                            </style>
+                            <path class="blueprint_een"
+                                d="M15,14H3v3h12V14z M14,16H4v-1h10V16z M6,21h16v-3H6V21z M7,19h14v1H7V19z M22,29h7v-3h-7V29z M23,27 h5v1h-5V27z M14,25h13v-3H14V25z M15,23h11v1H15V23z M31,5h-3V3c0-1.654-1.346-3-3-3s-3,1.346-3,3v2H10V3c0-1.654-1.346-3-3-3 S4,1.346,4,3v2H1C0.448,5,0,5.448,0,6v25c0,0.552,0.448,1,1,1h30c0.552,0,1-0.448,1-1V6C32,5.448,31.552,5,31,5z M24,3 c0-0.552,0.448-1,1-1s1,0.448,1,1v5c0,0.551-0.449,1-1,1s-1-0.449-1-1V3z M6,3c0-0.552,0.448-1,1-1s1,0.448,1,1v5 c0,0.551-0.449,1-1,1S6,8.551,6,8V3z M30,30H2V12h28V30z M30,11H2V7h3v1c0,1.105,0.895,2,2,2s2-0.895,2-2V7h14v1 c0,1.105,0.895,2,2,2s2-0.895,2-2V7h3V11z">
+                            </path>
+                        </g>
+                    </svg>
+                    <span>Planificador Nutricional</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="contenedor-general">
+            <form class="formulario">
+
+                <div class="form-group">
+                    <label>Peso (kg):</label>
+                    <input type="text" maxlength="3" placeholder="Ejemplo: 70"
+                        oninput="this.value = this.value.replace(/[^0-9]/g,'')">
+                </div>
+
+                <div class="form-group">
+                    <label>Altura (cm):</label>
+                    <input type="text" maxlength="3" placeholder="Ejemplo: 175"
+                        oninput="this.value = this.value.replace(/[^0-9]/g,'')">
+                </div>
+
+                <div class="form-group">
+                    <label>Nivel de actividad física:</label>
+                    <select>
+                        <option value="">Selecciona una opción</option>
+                        <option value="sedentario">Sedentario</option>
+                        <option value="ligero">Ligero</option>
+                        <option value="moderado">Moderado</option>
+                        <option value="intenso">Intenso</option>
+                        <option value="muy_intenso">Muy intenso</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Objetivo Principal:</label>
+                    <select>
+                        <option value="">Selecciona una opción</option>
+                        <option value="bajar">Bajar de peso</option>
+                        <option value="mantener">Mantener peso actual</option>
+                        <option value="subir">Aumentar masa muscular</option>
+                        <option value="salud">Mejorar salud general</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Sexo:</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="sexo" value="hombre">
+                            Hombre
+                        </label>
+                        <label>
+                            <input type="radio" name="sexo" value="mujer">
+                            Mujer
+                        </label>
+                    </div>
+                </div>
+
+
+                <div class="btn"> <button type="submit">Enviar</button></div>
+            </form>
+
+            <!-- Resultados -->
+            <div class="fondo-card">
+                <div class="resultados">
+                    <h2>Resultados</h2>
+
+                    <!-- Esto es lo que se ve al inicio -->
+                    <div class="textoo" id="texto-inicial">
+                        <p>Presione "Enviar" para obtener resultados</p>
+                    </div>
+
+                    <div style="display: flex; justify-content: center;" id="btn-container">
+                        <form action="/paginas/Seleccion_de_platillos/">
+                            <br>
+                            <button type="submit" class="btn" id="btn-siguiente" disabled>Siguiente</button>
+                        </form>
+                    </div>
+
+
+                    <!-- Esto aparece solo después de enviar -->
+                    <div class="textoo" id="contenedor-resultados" style="display:none;">
+                        <div class="form-group">
+                            <label>Tasa Metabólica Basal (TMB):</label>
+                            <input type="text" id="tmb" readonly placeholder="—">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Calorías con Actividad Física:</label>
+                            <input type="text" id="caloriasActividad" readonly placeholder="—">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Calorías Recomendadas Según Objetivo:</label>
+                            <input type="text" id="caloriasObjetivo" readonly placeholder="—">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!--FOOTER-->
+        <footer class="footer">
+            <div class="fot-container">
+                
+                <div class="columm">
+                    <h2>Planificación</h2>
+                    <ul>
+                        <li><a href="/">Conocenos</a></li>
+                        <li><a href="">Planificador Nutricional</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </footer>
+    </div>
+    <script src="/js/script.js"></script>
+    </div>
+</body>
+
+</html>

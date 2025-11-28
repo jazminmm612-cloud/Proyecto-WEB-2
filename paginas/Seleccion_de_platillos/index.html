@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planificador Nutricional</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/css/header&footer.css" />
+  <link rel="stylesheet" href="/css/platillos.css">
+</head>
+
+<body>
+  <div class="main-content">
+    <header>
+        <a href="/">
+          <div class="logo">
+            <img
+              src="/img/logo2.png"
+              alt="Logo de la empresa de dietas"
+              loading="lazy"
+            />
+          </div>
+        </a>
+        <nav>
+          <ul>
+            <li><a href="/">Conocenos</a></li>
+            <li>
+              <a href="/paginas/Planificador_Nutricional"
+                >Planificador Nutricional</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <div class="menu-toggle" id="menu-toggle">&#9776;</div>
+
+      <div class="sidebar" id="sidebar">
+        <nav>
+          <a href="/" class="selected">
+            <svg
+              class="img"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="#ffffff"
+            >
+              <path
+                d="M1 6V15H6V11C6 9.89543 6.89543 9 8 9C9.10457 9 10 9.89543 10 11V15H15V6L8 0L1 6Z"
+                fill="#ffffff"
+              />
+            </svg>
+            <span>Conocenos</span>
+          </a>
+
+          <a href="/paginas/Planificador_Nutricional/" class="selected">
+            <svg
+              class="img"
+              version="1.1"
+              id="Uploaded to svgrepo.com"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 32 32"
+              xml:space="preserve"
+              fill="#ffffff"
+              stroke="#ffffff"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <style type="text/css">
+                  .blueprint_een {
+                    fill: #ffffff;
+                  }
+                </style>
+                <path
+                  class="blueprint_een"
+                  d="M15,14H3v3h12V14z M14,16H4v-1h10V16z M6,21h16v-3H6V21z M7,19h14v1H7V19z M22,29h7v-3h-7V29z M23,27 h5v1h-5V27z M14,25h13v-3H14V25z M15,23h11v1H15V23z M31,5h-3V3c0-1.654-1.346-3-3-3s-3,1.346-3,3v2H10V3c0-1.654-1.346-3-3-3 S4,1.346,4,3v2H1C0.448,5,0,5.448,0,6v25c0,0.552,0.448,1,1,1h30c0.552,0,1-0.448,1-1V6C32,5.448,31.552,5,31,5z M24,3 c0-0.552,0.448-1,1-1s1,0.448,1,1v5c0,0.551-0.449,1-1,1s-1-0.449-1-1V3z M6,3c0-0.552,0.448-1,1-1s1,0.448,1,1v5 c0,0.551-0.449,1-1,1S6,8.551,6,8V3z M30,30H2V12h28V30z M30,11H2V7h3v1c0,1.105,0.895,2,2,2s2-0.895,2-2V7h14v1 c0,1.105,0.895,2,2,2s2-0.895,2-2V7h3V11z"
+                ></path>
+              </g>
+            </svg>
+            <span>Planificador Nutricional</span>
+          </a>
+        </nav>
+      </div>
+
+
+    <main>
+      <div class="contenedor-general">
+        <div class="filtros">
+          <h2>Filtro por Tipo</h2>
+          <select id="filtroCategoria">
+            <option value="todos">Todos</option>
+            <option value="proteina">Proteínas</option>
+            <option value="carb">Carbohidratos</option>
+            <option value="grasas">Grasas</option>
+          </select>
+          <label for=""><input type="search" id="busquedaIngrediente" placeholder="Buscar por ingrediente"></label>
+
+          <div class="ingredientes">
+            <div class="categoria" id="proteina"></div>
+            <div class="categoria" id="carb"></div>
+            <div class="categoria" id="grasas"></div>
+          </div>
+
+
+
+          <div class="btn"><button>Agregar</button></div>
+        </div>
+
+        <div class="right">
+          <div class="platillos">
+            <div class="btn2" id="btn-platillo-1"><button>Platillo 1</button></div>
+            <div class="btn2" id="btn-platillo-2"><button>Platillo 2</button></div>
+            <div class="btn2" id="btn-platillo-3"><button>Platillo 3</button></div>
+            <div class="btn2" id="btn-platillo-4"><button>Platillo 4 (opcional)</button></div>
+            <div class="btn2" id="btn-platillo-5"><button>Platillo 5 (opcional)</button></div>
+          </div>
+
+          <div class="down">
+            <div class="left">
+              <div class="nutriente">
+                <div class="fila-titulo">
+                  <h3>Proteína</h3>
+                  <label>Cantidad (gr)</label>
+                </div>
+
+                <div class="fila-input">
+                  <input type="text" class="input-nombre" placeholder="Proteína" readonly>
+                  <div class="cantidad-wrap">
+                    <input type="text" class="input-cantidad">
+                    <button class="btn-x">X</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="nutriente">
+                <div class="fila-titulo">
+                  <h3>Carbohidratos</h3>
+                  <label>Cantidad (gr)</label>
+                </div>
+
+                <div class="fila-input">
+                  <input type="text" class="input-nombre" placeholder="Carbohidratos" readonly>
+                  <div class="cantidad-wrap">
+                    <input type="text" class="input-cantidad">
+                    <button class="btn-x">X</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="nutriente">
+                <div class="fila-titulo">
+                  <h3>Grasas</h3>
+                  <label>Cantidad (gr)</label>
+                </div>
+
+                <div class="fila-input">
+                  <input type="text" class="input-nombre" placeholder="Grasas" readonly>
+                  <div class="cantidad-wrap">
+                    <input type="text" class="input-cantidad">
+                    <button class="btn-x">X</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="contenedor-right">
+
+              <div class="cuentas">
+                <div class="conta">
+                  <p>Optima (KCal): <input type="text" name="caloriasOptimas" id="input-optimo" readonly></p>
+                </div>
+
+                <div class="conta">
+                  <p>Actual (KCal): <input type="text" name="caloriasActuales" id="input-actual" readonly></p>
+                </div>
+              </div>
+
+              <div class="dato">
+                <h5>Todos los productos o alimentos liquidos deberan ser convertidos a su equivalente en gramos</h5>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="btnLimpiar">Limpiar</button>
+            <button id="btnImprimir">Imprimir</button>
+            <button id="btnGuardar">Guardar</button>
+
+          </div>
+        </div>
+
+        <div class="busqueda">
+          <input type="search" placeholder="Búsqueda por nombre del platillo">
+        </div>
+      </div>
+
+      <div class="platos-nombres">
+        <div class="platos">
+          <p>Nombre de Platillo</p>
+        </div>
+        <div class="platos">
+          <p>Nombre de Platillo</p>
+        </div>
+        <div class="platos">
+          <p>Nombre de Platillo</p>
+        </div>
+        <div class="platos">
+          <p>Nombre de Platillo</p>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="fot-container">
+        <div class="columm">
+          <h2>Planificación</h2>
+          <ul>
+            <li><a href="/">Conocenos</a></li>
+            <li><a href="">Planificador Nutricional</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="copy">
+        <p>©2025 Todos los derechos reservados.</p>
+      </div>
+    </footer>
+    <script src="/js/alimentos.js"></script>
+    <script src="/js/script.js"></script>
+
+</body>
+</html>
