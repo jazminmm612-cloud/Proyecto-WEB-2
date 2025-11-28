@@ -187,7 +187,6 @@ main {
 }
 
 .entrada-nombre {
-  flex: 1 1 200px;
   padding: 0.75rem;
   border-radius: 10px;
   border: none;
@@ -200,7 +199,6 @@ main {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex: 1 1 200px;
   min-width: 200px;
 }
 
@@ -392,6 +390,12 @@ main {
         display: inline;
   }
 
+.tab:hover{
+    background-color: var(--primary-color); 
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+  }
+
 /* Tabletas Grandes (992px - 1200px) */
 @media (max-width: 1200px) and (min-width: 993px) {
   .contenedor-general {
@@ -506,7 +510,6 @@ main {
   }
   
   .envoltorio-cantidad {
-    flex: 1 1 180px;
     min-width: 180px;
   }
   
@@ -582,6 +585,13 @@ main {
   .ingredientes{
     margin: 0 100px;
   }
+
+    .platillos{
+    visibility: hidden;
+  }
+  .tabs{
+    visibility: visible;
+  }
 }
 
 /* Móviles (576px) */
@@ -609,12 +619,6 @@ main {
   
   .plato {
     flex: 1 1 100%;
-  }
-  .platillos{
-    visibility: hidden;
-  }
-  .tabs{
-    visibility: visible;
   }
 }
 
