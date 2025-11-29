@@ -592,6 +592,9 @@ main {
   .tabs{
     visibility: visible;
   }
+  .contenedor-pie{
+    padding-bottom: 50px;
+  }
 }
 
 /* Móviles (576px) */
