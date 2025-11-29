@@ -55,6 +55,12 @@ form.formulario,
   text-align: center;
 }
 
+#TextoInicial {
+  display: flex;
+  justify-content: center;
+  color: #3b162c;
+}
+
 form.formulario:hover,
 .resultados:hover {
   transform: translateY(-5px);
@@ -97,6 +103,8 @@ textarea:focus {
   border-color: #a93b82;
   box-shadow: 0 0 8px rgba(169, 59, 130, 0.3);
 }
+
+
 
 /* Radio buttons */
 .grupo-radio {

@@ -64,21 +64,42 @@ document.querySelector(".formulario").addEventListener("submit", function (e) {
         ? caloriasActividad + 300
         : caloriasActividad;
 
-    // Mostrar resultados
+    //mostrar resultados
     document.getElementById("Tmb").value = Math.round(tmb) + " kcal";
     document.getElementById("CaloriasActividad").value = Math.round(caloriasActividad) + " kcal";
     document.getElementById("CaloriasObjetivo").value = Math.round(caloriasObjetivo) + " kcal";
 
-    // Guardar calorías óptimas en localStorage para la siguiente página
+    //localStorage para la siguiente página
     localStorage.setItem('caloriasOptimas', Math.round(caloriasObjetivo));
 
-    // Ocultar texto inicial
+    // Se guarda el id, etiqueta y un mensaje motivacional.
+    localStorage.setItem('actividadNivel', actividad);
+
+    const actividadLabels = {
+      sedentario: 'Sedentario',
+      ligero: 'Actividad ligera',
+      moderado: 'Actividad moderada',
+      intenso: 'Actividad intensa',
+      muy_intenso: 'Actividad muy intensa'
+    };
+
+    const mensajesMotivacionales = {
+      sedentario: '¡Pequeños pasos cuentan! Intenta caminar 10–15 minutos al día y ve aumentando gradualmente. Consejo de sueño: intenta dormir 7–9 horas y evita pantallas 30 minutos antes de acostarte.',
+      ligero: '¡Bien hecho! Mantén tu constancia y añade 10 minutos más a tus sesiones si te sientes con energía. Consejo de sueño: apunta a 7–9 horas y sigue una rutina relajante antes de dormir.',
+      moderado: '¡Excelente! Continúa con este ritmo y considera incluir fuerza 2 veces por semana. Consejo de sueño: duerme 7–9 horas y añade estiramientos suaves para mejorar la recuperación muscular.',
+      intenso: '¡Genial! Mantén una buena recuperación y escucha a tu cuerpo para evitar sobrecargas. Consejo de sueño: prioriza el sueño profundo (7–9 horas) y evita entrenar muy tarde.',
+      muy_intenso: '¡Eres un atleta! Prioriza la recuperación, la nutrición y el sueño para rendir al máximo. Consejo de sueño: procura 7–9 horas, mejora la higiene del sueño y considera siestas cortas cuando las necesites.'
+    };
+
+    //mensaje para usar despues
+    localStorage.setItem('actividadLabel', actividadLabels[actividad] || actividad);
+    localStorage.setItem('mensajeMotivacional', mensajesMotivacionales[actividad] || '¡Sigue así!');
+
     document.getElementById("TextoInicial").style.display = "none";
 
-    // Mostrar resultados
     document.getElementById("ContenedorResultados").style.display = "block";
 
-    // Habilitar botón siguiente
+    //habilitar botón siguiente
     const BotonSiguiente = document.getElementById("BotonSiguiente");
     const ContenedorBoton = document.getElementById("ContenedorBoton");
     document.querySelector(".resultados").appendChild(ContenedorBoton);
