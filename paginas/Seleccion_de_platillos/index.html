@@ -181,6 +181,10 @@
                 <div class="cuenta">
                   <p>Actual (KCal): <input type="text" name="caloriasActuales" id="InputActual" readonly></p>
                 </div>
+                <div class="cuenta">
+                  <p>Agua (Diaria): <input type="text" name="AguaRecomendada" id="InputAgua" readonly></p>
+                </div>
+                
               </div>
 
               <div class="dato">
@@ -249,6 +253,19 @@
     <script src="/js/alimentos.js"></script>
     <script src="/js/script.js"></script>
     <script src="/js/index.js"></script>
+
+<!-- para que lo del agua sirva -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const campoAgua = document.getElementById("InputAgua");
+    const aguaGuardada = localStorage.getItem("AguaRecomendada");
+
+    if (campoAgua && aguaGuardada) {
+        campoAgua.value = aguaGuardada + " L";
+    }
+});
+</script>
 
 </body>
 </html>

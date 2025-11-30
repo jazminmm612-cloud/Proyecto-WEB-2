@@ -64,10 +64,23 @@ document.querySelector(".formulario").addEventListener("submit", function (e) {
         ? caloriasActividad + 300
         : caloriasActividad;
 
-    //mostrar resultados
-    document.getElementById("Tmb").value = Math.round(tmb) + " kcal";
-    document.getElementById("CaloriasActividad").value = Math.round(caloriasActividad) + " kcal";
-    document.getElementById("CaloriasObjetivo").value = Math.round(caloriasObjetivo) + " kcal";
+    //  MOSTRAR RESULTADOS 
+document.getElementById("Tmb").value = Math.round(tmb) + " kcal";
+document.getElementById("CaloriasActividad").value = Math.round(caloriasActividad) + " kcal";
+document.getElementById("CaloriasObjetivo").value = Math.round(caloriasObjetivo) + " kcal";
+
+//CALCULAR AGUA CON PESO 
+const aguaLitros = peso * 0.035; 
+
+// esto es para que la pagina anterior sirva
+const campoAgua = document.getElementById("InputAgua");
+if (campoAgua !== null) {
+    campoAgua.value = aguaLitros.toFixed(2) + " L";
+}
+
+  // localStorage para usarlo en otra página
+  localStorage.setItem("AguaRecomendada", aguaLitros.toFixed(2));
+
 
     //localStorage para la siguiente página
     localStorage.setItem('caloriasOptimas', Math.round(caloriasObjetivo));
