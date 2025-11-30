@@ -683,3 +683,9 @@ main {
     padding: 6px 8px;
   }
 }
+
+@media (max-width: 320px){
+  .ingredientes{
+    margin: 0 30px;
+  }
+}
