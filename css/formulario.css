@@ -36,6 +36,7 @@ form.formulario,
   width: 100%;
   transition: transform 0.3s, box-shadow 0.3s;
   height: 600px;
+  margin-top: 60px;
 }
 
 .resultados {

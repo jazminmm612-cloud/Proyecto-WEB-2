@@ -18,7 +18,7 @@ body {
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: 40px;
+  margin-top: 170px;
 }
 
 .bienvenida {
@@ -31,10 +31,17 @@ body {
   border-radius: 15px;
   text-align: center;
 }
+.bienvenida h1
+{
+  font-size: 40px;
+  
+
+}
 
 .texto {
   margin-top: 20px;
   font-size: 20px;
+  text-align: center;
 }
 
 .contenedor-inferior {
@@ -57,16 +64,19 @@ body {
   background-color: #eccceb;
   border-radius: 20px;
   padding: 20px;
+
 }
+
 
 .contenedor-inferior-inferior {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 30px;
 }
 
 .imagen img {
-  width: 300px;
+  width: 500px;
   height: 300px;
   object-fit: cover;
   border-radius: 20px;
