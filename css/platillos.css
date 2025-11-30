@@ -397,6 +397,9 @@ main {
     transition: all 0.3s ease;
   }
 
+.label-oculto{
+    display:none;
+  }
 /* Tabletas Grandes (992px - 1200px) */
 @media (max-width: 1200px) and (min-width: 993px) {
   .contenedor-general {
@@ -702,10 +705,22 @@ main {
     gap: 6px;
     padding: 6px 8px;
   }
+  .label-visible{
+    display: none;
+  }
+  .label-oculto{
+    display:initial;
+  }
 }
 
 @media (max-width: 320px){
   .ingredientes{
     margin: 0 30px;
+  }
+}
+@media (max-width: 480px) {
+  .izquierda {
+    max-height: none !important;
+    overflow-y: visible !important;
   }
 }
