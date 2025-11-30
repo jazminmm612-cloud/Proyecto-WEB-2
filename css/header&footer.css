@@ -87,7 +87,7 @@ nav ul li a:hover {
 .menu-toggle {
   display: none;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-between; 
   width: 30px;
   height: 21px;
   cursor: pointer;
