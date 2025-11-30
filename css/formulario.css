@@ -176,6 +176,7 @@ button:hover {
     justify-content: center;
     flex-direction: column;
     padding: 0 15px;
+    margin-top: 100px;
   }
 
   form.formulario,
@@ -188,5 +189,6 @@ button:hover {
 @media (max-width: 375px){
   .contenedor-general{
     margin-top: 100px;
+    padding-bottom: 100px;
   }
 }
