@@ -21,12 +21,8 @@ const ingredientesFitness = [
     { nombre: "Pollo", cat: "proteina", kcal_por_gramo: 1.6 }
 ];
 
-// Contenedores (Elementos del DOM)
-const contenedores = {
-    proteina: document.getElementById("Proteina"),
-    carb: document.getElementById("Carbohidratos"),
-    grasas: document.getElementById("Grasas")
-};
+// Contenedores (Se inicializarán en DOMContentLoaded para evitar errores)
+let contenedores = {}; 
 
 // Objeto para mapear rápidamente Nombre del Ingrediente -> kcal/g
 const caloriasMap = ingredientesFitness.reduce((map, item) => {
@@ -34,22 +30,17 @@ const caloriasMap = ingredientesFitness.reduce((map, item) => {
     return map;
 }, {});
 
-
 // --- GESTIÓN DE PLATILLOS (Variables Globales) ---
-// Objeto para almacenar todas las recetas por su ID.
+
+// 🚨 CORRECCIÓN CLAVE: Inicialización para CARGAR, no para borrar (como hacía alimentos2.js)
 let recetasGuardadas = JSON.parse(localStorage.getItem('recetasGuardadas')) || {};
-
-// Variable para saber qué platillo estamos editando. Siempre inicia en 'BotonPlatillo1'.
-let platilloActivoId = 'BotonPlatillo1'; 
-
+let platilloActivoId = 'BotonPlatillo1';
+let platillosGuardadosParaMostrar = JSON.parse(localStorage.getItem('platillosGuardadosParaMostrar')) || []; 
 
 // ----------------------------------------------------
 // FUNCIONES DE CÁLCULO Y GESTIÓN DE ESTADO
 // ----------------------------------------------------
 
-/**
- * Calcula la suma total de calorías de los ingredientes y actualiza el input "Actual".
- */
 function actualizarCaloriasActuales() {
     let caloriasTotales = 0;
     
@@ -64,22 +55,18 @@ function actualizarCaloriasActuales() {
         }
     });
 
-    // Actualiza el input "Actual" y lo redondea
+    // Aseguramos que el nombre de la variable de cálculo sea consistente
     document.getElementById("InputActual").value = Math.round(caloriasTotales) + " kcal";
 }
 
-/**
- * Guarda el estado actual de los inputs del DOM en 'recetasGuardadas' para el platillo activo.
- */
-function guardarPlatillo() {
+function guardarPlatilloActual() {
     const ingredientesPlatillo = [];
 
     document.querySelectorAll(".fila-entrada").forEach(fila => {
         const nombre = fila.querySelector(".entrada-nombre").value;
         const cantidad = fila.querySelector(".entrada-cantidad").value;
         
-        // Solo guarda si el ingrediente tiene un nombre
-        if (nombre) {
+        if (nombre && cantidad) {
             ingredientesPlatillo.push({
                 nombre: nombre,
                 cantidad: cantidad 
@@ -87,23 +74,15 @@ function guardarPlatillo() {
         }
     });
 
-    // Usa el ID del platillo activo para guardar la receta en el objeto global
     recetasGuardadas[platilloActivoId] = ingredientesPlatillo;
-    
-    // Guarda el objeto completo en el almacenamiento local del navegador
     localStorage.setItem('recetasGuardadas', JSON.stringify(recetasGuardadas));
 }
 
-/**
- * Carga los ingredientes de un ID de platillo en el DOM.
- * Si el platillo no existe en recetasGuardadas, se limpia el formulario.
- */
 function cargarPlatillo(id) {
-    // 1. Limpieza total y reinicio del DOM para el nuevo platillo
+    // 1. Limpieza total y reinicio del DOM
     document.querySelectorAll(".nutriente").forEach(nutriente => {
         const filas = Array.from(nutriente.querySelectorAll(".fila-entrada"));
         
-        // Mantiene solo la primera fila y la vacía
         filas.slice(1).forEach(fila => fila.remove());
         
         if (filas.length > 0) {
@@ -112,62 +91,93 @@ function cargarPlatillo(id) {
         }
     });
 
-    // 2. Carga los ingredientes guardados para el nuevo platillo.
+    // 2. Actualiza el ID del platillo activo
+    platilloActivoId = id;
+    
+    // 3. Resalta el botón activo
+    actualizarClaseActivoTabs(id);
+
+    // 4. Carga los ingredientes guardados
     const receta = recetasGuardadas[id] || [];
     
-    // Si la receta existe, la cargamos.
     if (receta.length > 0) {
         let inputContador = { 'proteina': 0, 'carb': 0, 'grasas': 0 };
 
-        receta.forEach(item => {
+        receta.forEach((item) => {
             const ingredienteData = ingredientesFitness.find(i => i.nombre === item.nombre);
-            if (!ingredienteData) return; 
+            if (!ingredienteData) return;
             
             const categoria = ingredienteData.cat;
-            const nutrienteContenedor = contenedores[categoria];
+            
+            // Usamos el mecanismo de búsqueda de contenedores del alimentos2.js
+            let nutrienteContenedor = null;
+            const todosNutrientes = document.querySelectorAll('.nutriente');
+            
+            todosNutrientes.forEach(nutriente => {
+                const h3 = nutriente.querySelector('h3');
+                if (!h3) return;
+                
+                const titulo = h3.textContent.toLowerCase();
+                
+                if (categoria === 'proteina' && titulo.includes('proteína')) {
+                    nutrienteContenedor = nutriente;
+                } else if (categoria === 'carb' && titulo.includes('carbohidrato')) {
+                    nutrienteContenedor = nutriente;
+                } else if (categoria === 'grasas' && titulo.includes('grasa')) {
+                    nutrienteContenedor = nutriente;
+                }
+            });
+
 
             if (nutrienteContenedor) {
                 let filaTarget = null;
                 
-                // Si es el primer ingrediente de esta categoría, usamos la fila existente (que limpiamos)
                 if (inputContador[categoria] === 0) {
                     filaTarget = nutrienteContenedor.querySelector(".fila-entrada");
                 } else {
-                    // Si no, clonamos una nueva fila
                     const filaOriginal = nutrienteContenedor.querySelector(".fila-entrada");
                     filaTarget = filaOriginal.cloneNode(true);
-                    // Aseguramos que el clon tenga valores vacíos antes de rellenar si es necesario
+                    
                     filaTarget.querySelector(".entrada-nombre").value = "";
                     filaTarget.querySelector(".entrada-cantidad").value = "";
+                    
                     nutrienteContenedor.appendChild(filaTarget);
                 }
                 
-                // Asignamos los valores
-                filaTarget.querySelector(".entrada-nombre").value = item.nombre;
-                filaTarget.querySelector(".entrada-cantidad").value = item.cantidad;
+                if (filaTarget) {
+                    filaTarget.querySelector(".entrada-nombre").value = item.nombre;
+                    filaTarget.querySelector(".entrada-cantidad").value = item.cantidad;
+                }
                 
                 inputContador[categoria]++;
             }
         });
     }
 
-    // 3. Resalta el botón activo
-    document.querySelectorAll('.platillos button').forEach(btn => btn.classList.remove('activo'));
-    const btnActivo = document.getElementById(id);
-    if (btnActivo) {
-        btnActivo.classList.add('activo');
-    }
-
-    // 4. Actualiza el total de calorías actuales
+    // 5. Actualiza el total de calorías
     actualizarCaloriasActuales();
-    
-    // 5. Guarda el ID del platillo como activo
-    platilloActivoId = id;
 }
 
-/**
- * Carga el objetivo calórico de localStorage y añade listeners dinámicos.
- */
+function actualizarClaseActivoTabs(id) {
+    document.querySelectorAll('.platillos .boton-secundario').forEach(div => div.classList.remove('activo'));
+    const divActivoPC = document.getElementById(id);
+    if (divActivoPC) {
+        divActivoPC.classList.add('activo');
+    }
+
+    const tabs = document.querySelectorAll('.tabs .tab');
+    
+    const numeroPlatillo = parseInt(id.replace('BotonPlatillo', ''));
+    const indexActivo = numeroPlatillo - 1; 
+
+    tabs.forEach((tab, index) => {
+        tab.classList.remove('activo');
+        if (index === indexActivo) {
+            tab.classList.add('activo');
+        }
+    });
+}
+
 function inicializarCalculoCalorias() {
     const inputOptimo = document.getElementById('InputOptimo');
     const caloriasOptimas = localStorage.getItem('caloriasOptimas');
@@ -176,7 +186,6 @@ function inicializarCalculoCalorias() {
         inputOptimo.value = caloriasOptimas ? caloriasOptimas + " kcal" : "N/D";
     }
 
-    // Listener para el cálculo dinámico
     document.querySelector(".abajo").addEventListener('input', (e) => {
         if (e.target.classList.contains('entrada-cantidad')) {
             actualizarCaloriasActuales();
@@ -184,9 +193,6 @@ function inicializarCalculoCalorias() {
     });
 }
 
-/**
- * Función unificada para la eliminación y el recálculo (Maneja el botón 'X').
- */
 const manejarEliminacion = (fila) => {
     const contenedorNutriente = fila.closest(".nutriente");
     const filasExistentes = contenedorNutriente.querySelectorAll(".fila-entrada");
@@ -201,12 +207,10 @@ const manejarEliminacion = (fila) => {
     actualizarCaloriasActuales(); 
 };
 
-
 // ----------------------------------------------------
 // LÓGICA DE INTERFAZ Y EVENTOS
 // ----------------------------------------------------
 
-// Cargar ingredientes en HTML
 function cargarIngredientes() {
     ingredientesFitness.forEach(i => {
         const div = document.createElement("div");
@@ -217,7 +221,6 @@ function cargarIngredientes() {
     });
 }
 
-// Event Listeners (Filtro, Búsqueda, Selección, Agregar, Limpiar, Eliminar, Guardar, Imprimir)
 document.getElementById("FiltroCategoria").addEventListener("change", e => {
     const cat = e.target.value;
     document.querySelectorAll(".ingrediente").forEach(div => {
@@ -284,19 +287,15 @@ document.querySelector(".boton button").addEventListener("click", () => {
     categoriaSeleccionada = null;
 });
 
-
 document.getElementById("BotonLimpiar").addEventListener("click", () => {
-    // Para limpiar, llamamos a manejarEliminacion en cada fila
     document.querySelectorAll(".nutriente").forEach(nutriente => {
         Array.from(nutriente.querySelectorAll(".fila-entrada")).reverse().forEach(fila => {
             manejarEliminacion(fila);
         });
     });
     
-    // Guardamos el platillo activo como vacío
-    guardarPlatillo(); 
+    guardarPlatilloActual(); 
 });
-
 
 document.querySelector(".abajo").addEventListener('click', (e) => {
     if (e.target.classList.contains('boton-equis')) {
@@ -304,33 +303,92 @@ document.querySelector(".abajo").addEventListener('click', (e) => {
     }
 });
 
+// LÓGICA DE GUARDAR PLATILLO CON NOMBRE (DE alimentos2.js)
 document.getElementById("BotonGuardar").addEventListener("click", () => {
-    guardarPlatillo(); 
-    
-    // Lógica de impresión a consola (se mantiene)
-    const datos = [];
-    document.querySelectorAll(".nutriente").forEach(nutriente => {
-        const filas = nutriente.querySelectorAll(".fila-entrada");
-        filas.forEach(fila => {
-            const ingrediente = fila.querySelector(".entrada-nombre").value;
-            const cantidad = fila.querySelector(".entrada-cantidad").value;
-            if (ingrediente) { datos.push({ categoria: nutriente.querySelector("h3").textContent, ingrediente, cantidad }); }
-        });
+    // Verificar que haya al menos un ingrediente
+    const hayIngredientes = Array.from(document.querySelectorAll(".fila-entrada")).some(fila => {
+        const nombre = fila.querySelector(".entrada-nombre").value;
+        const cantidad = fila.querySelector(".entrada-cantidad").value;
+        return nombre && cantidad;
     });
-    console.log("Datos guardados:", datos);
-    alert("¡Datos guardados en consola!");
+
+    if (!hayIngredientes) {
+        alert("No hay ingredientes para guardar. Agrega al menos uno.");
+        return;
+    }
+
+    // Pedir nombre del platillo
+    const nombrePlatillo = prompt("¿Cómo quieres llamar a este platillo?");
+    
+    if (!nombrePlatillo || nombrePlatillo.trim() === "") {
+        alert("Debes ponerle un nombre al platillo.");
+        return;
+    }
+
+    // Guardar el platillo actual en recetasGuardadas
+    guardarPlatilloActual();
+    
+    // Recopilar datos del platillo para mostrar
+    const ingredientesPorCategoria = {
+        proteina: [],
+        carb: [],
+        grasas: []
+    };
+
+    document.querySelectorAll(".nutriente").forEach(nutriente => {
+        const h3 = nutriente.querySelector("h3").textContent.toLowerCase();
+        let categoria = null;
+        
+        if (h3.includes("proteína")) categoria = "proteina";
+        else if (h3.includes("carbohidrato")) categoria = "carb";
+        else if (h3.includes("grasa")) categoria = "grasas";
+
+        if (categoria) {
+            nutriente.querySelectorAll(".fila-entrada").forEach(fila => {
+                const nombre = fila.querySelector(".entrada-nombre").value;
+                const cantidad = fila.querySelector(".entrada-cantidad").value;
+                if (nombre && cantidad) {
+                    ingredientesPorCategoria[categoria].push({ nombre, cantidad });
+                }
+            });
+        }
+    });
+
+    // Crear objeto del platillo guardado
+    const platilloGuardado = {
+        nombre: nombrePlatillo.trim(),
+        ingredientes: ingredientesPorCategoria,
+        caloriasTotales: document.getElementById("InputActual").value
+    };
+
+    // Agregar a la lista (máximo 4)
+    if (platillosGuardadosParaMostrar.length >= 4) {
+        alert("Ya tienes 4 platillos guardados. Se reemplazará el más antiguo.");
+        platillosGuardadosParaMostrar.shift();
+    }
+    
+    platillosGuardadosParaMostrar.push(platilloGuardado);
+    
+    // Guardar la lista de platillos nombrados para persistencia
+    localStorage.setItem('platillosGuardadosParaMostrar', JSON.stringify(platillosGuardadosParaMostrar)); 
+    
+    // Actualizar la interfaz de abajo
+    actualizarPlatillosGuardadosUI();
+    
+    alert(`¡Platillo "${nombrePlatillo}" guardado correctamente!`);
 });
 
 
-
+// LÓGICA DE IMPRIMIR CON MENSAJE MOTIVACIONAL (DE alimentos.js)
 document.getElementById("BotonImprimir").addEventListener("click", () => {
-    guardarPlatillo();
+    // Guarda el platillo actual antes de imprimir
+    guardarPlatilloActual(); 
     
-    // frase motivacional de localStorage
+    // Frase motivacional de localStorage
     const mensajeMotivacional = localStorage.getItem('mensajeMotivacional') || '¡Sigue así!';
     const actividadLabel = localStorage.getItem('actividadLabel') || '';
     
-    // actualizar el elemento para la frase 
+    // Actualizar el elemento para la frase 
     let fraseElement = document.querySelector('.frase-motivacional-print');
     if (!fraseElement) {
         fraseElement = document.createElement('div');
@@ -350,11 +408,8 @@ document.getElementById("BotonImprimir").addEventListener("click", () => {
     fraseElement.style.display = 'block';
     fraseElement.style.visibility = 'visible';
     
-    console.log('Preparando para imprimir...');
-    console.log('Frase motivacional:', textoFrase);
-    
     const afterPrint = () => {
-
+        // Oculta la frase después de imprimir
         fraseElement.style.display = 'none';
         fraseElement.style.visibility = 'hidden';
         
@@ -364,38 +419,119 @@ document.getElementById("BotonImprimir").addEventListener("click", () => {
     window.addEventListener('afterprint', afterPrint);
 
     window.print();
-
 });
 
 
-/**
- * Inicializa los listeners de los botones de platillo.
- */
-function inicializarBotonesPlatillos() {
-    const botonesPlatillo = document.querySelectorAll('.platillos button');
+// ----------------------------------------------------
+// GESTIÓN DE PLATILLOS GUARDADOS PARA MOSTRAR
+// ----------------------------------------------------
 
-    botonesPlatillo.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const nuevoId = btn.id;
+function actualizarPlatillosGuardadosUI() {
+    const contenedorPlatos = document.querySelectorAll('.platillos-nombres .plato');
+    
+    contenedorPlatos.forEach((plato, index) => {
+        if (platillosGuardadosParaMostrar[index]) {
+            const platilloData = platillosGuardadosParaMostrar[index];
+            plato.querySelector('p').textContent = platilloData.nombre;
+            plato.style.cursor = "pointer";
+            plato.style.opacity = "1";
             
-            // 1. GUARDA el estado del platillo ANTES de cambiar (la clave para la navegación)
-            guardarPlatillo(); 
-            
-            // 2. CARGA el nuevo platillo
-            cargarPlatillo(nuevoId);
+            // Agregar evento click para mostrar el detalle
+            plato.onclick = () => mostrarDetallePlatillo(platilloData);
+        } else {
+            plato.querySelector('p').textContent = "Nombre de Platillo";
+            plato.style.cursor = "default";
+            plato.style.opacity = "0.5";
+            plato.onclick = null;
+        }
+    });
+}
+
+function mostrarDetallePlatillo(platillo) {
+    let mensaje = `${platillo.nombre}\n`;
+    mensaje += `Total: ${platillo.caloriasTotales}\n\n`;
+    
+    // Proteínas
+    if (platillo.ingredientes.proteina.length > 0) {
+        mensaje += "Proteínas:\n";
+        platillo.ingredientes.proteina.forEach(ing => {
+            mensaje += `  • ${ing.nombre}: ${ing.cantidad}g\n`;
+        });
+        mensaje += "\n";
+    }
+    
+    // Carbohidratos
+    if (platillo.ingredientes.carb.length > 0) {
+        mensaje += "Carbohidratos:\n";
+        platillo.ingredientes.carb.forEach(ing => {
+            mensaje += `  • ${ing.nombre}: ${ing.cantidad}g\n`;
+        });
+        mensaje += "\n";
+    }
+    
+    // Grasas
+    if (platillo.ingredientes.grasas.length > 0) {
+        mensaje += "Grasas:\n";
+        platillo.ingredientes.grasas.forEach(ing => {
+            mensaje += `  • ${ing.nombre}: ${ing.cantidad}g\n`;
+        });
+    }
+    
+    alert(mensaje);
+}
+
+// ----------------------------------------------------
+// INICIALIZACIÓN DE PLATILLOS Y ARRANQUE
+// ----------------------------------------------------
+
+function inicializarBotonesPlatillos() {
+    const elementosNavegacion = document.querySelectorAll('.platillos button, .tabs .tab');
+
+    elementosNavegacion.forEach(elemento => {
+        elemento.addEventListener('click', () => {
+            let idParaCargar;
+
+            if (elemento.closest('.platillos')) {
+                idParaCargar = elemento.closest('.boton-secundario').id;
+            } else if (elemento.closest('.tabs')) {
+                const tabsContenedor = document.querySelector('.tabs');
+                const tabs = Array.from(tabsContenedor.querySelectorAll('.tab'));
+                const index = tabs.indexOf(elemento);
+                idParaCargar = `BotonPlatillo${index + 1}`;
+            }
+
+            if (idParaCargar && idParaCargar !== platilloActivoId) {
+                // 1. GUARDA el estado del platillo actual ANTES de cambiar
+                guardarPlatilloActual();
+                
+                // 2. CARGA el nuevo platillo. 
+                cargarPlatillo(idParaCargar);
+            }
         });
     });
 
-    // 3. Carga el platillo inicial al arrancar.
+    // Carga inicial
     cargarPlatillo(platilloActivoId);
 }
 
 
-cargarIngredientes();
-inicializarCalculoCalorias(); 
-inicializarBotonesPlatillos();
+// --- INICIALIZACIÓN FINAL CORREGIDA (Carga segura del DOM) ---
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Definimos 'contenedores' solo cuando el DOM ya está cargado
+    contenedores = {
+        proteina: document.getElementById("Proteina"),
+        carb: document.getElementById("Carbohidratos"),
+        grasas: document.getElementById("Grasas")
+    };
 
-// Asegura que los últimos cambios se guarden antes de que el usuario cierre o recargue.
-window.addEventListener('beforeunload', () => {
-    guardarPlatillo();
+    // 2. Ejecutamos todas las funciones de inicialización
+    cargarIngredientes();
+    inicializarCalculoCalorias(); 
+    inicializarBotonesPlatillos();
+    actualizarPlatillosGuardadosUI();
+
+    // 3. Asegura el guardado final antes de recargar
+    window.addEventListener('beforeunload', () => {
+        guardarPlatilloActual();
+    });
 });
