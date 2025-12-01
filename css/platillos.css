@@ -725,3 +725,120 @@ main {
     overflow-y: visible !important;
   }
 }
+
+.frase-motivacional-print {
+  display: none;
+  margin-top: 10px;
+}
+
+@media print {
+  /* Ocultar todo por defecto */
+  body * {
+    visibility: hidden;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .contenedor-general,
+  .contenedor-general * {
+    visibility: visible;
+  }
+  
+  /* Ocultar elementos no deseados */
+  header, 
+  footer, 
+  .filtros, 
+  .platillos, 
+  .contenedor-derecha, 
+  .acciones, 
+  .busqueda, 
+  .platillos-nombres,
+  .tabs,
+  .derecha > .platillos,
+  .derecha > .acciones,
+  .derecha > .busqueda {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  
+
+  .izquierda {
+    position: static !important;
+    width: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: white !important;
+    padding: 20px !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    display: flex !important;
+    gap: 10px !important;
+    visibility: visible !important;
+  }
+  
+
+  .nutriente {
+    display: block !important;
+    visibility: visible !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 20px;
+  }
+
+  .frase-motivacional-print {
+    display: block !important;
+    visibility: visible !important;
+    margin-top: 30px !important;  
+    padding: 15px  !important;
+    background-color: #f8eaf4 !important;
+    border: 1px solid #e62e6b !important;
+    border-radius: 10px;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.4;
+    page-break-inside: avoid;
+    color: black !important;
+  }
+
+ /* .entrada-nombre,
+  .entrada-cantidad {
+    background: transparent !important;
+    border: 1px solid #ccc !important;
+    color: black !important;
+  }*/
+
+  
+  .boton-equis {
+    display: none !important;
+  }
+  
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+  }
+  
+  .contenedor-general {
+    background: white !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+  
+  .derecha {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+  }
+  
+  .abajo {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    flex-direction: column !important;
+  }
+}

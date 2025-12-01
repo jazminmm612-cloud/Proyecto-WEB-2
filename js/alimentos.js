@@ -284,9 +284,7 @@ document.querySelector(".boton button").addEventListener("click", () => {
     categoriaSeleccionada = null;
 });
 
-// **********************************************
-// 🌟 CORRECCIÓN 1: Agregar guardarPlatillo() al limpiar
-// **********************************************
+
 document.getElementById("BotonLimpiar").addEventListener("click", () => {
     // Para limpiar, llamamos a manejarEliminacion en cada fila
     document.querySelectorAll(".nutriente").forEach(nutriente => {
@@ -323,14 +321,52 @@ document.getElementById("BotonGuardar").addEventListener("click", () => {
     alert("¡Datos guardados en consola!");
 });
 
+
+
 document.getElementById("BotonImprimir").addEventListener("click", () => {
+    guardarPlatillo();
+    
+    // frase motivacional de localStorage
+    const mensajeMotivacional = localStorage.getItem('mensajeMotivacional') || '¡Sigue así!';
+    const actividadLabel = localStorage.getItem('actividadLabel') || '';
+    
+    // actualizar el elemento para la frase 
+    let fraseElement = document.querySelector('.frase-motivacional-print');
+    if (!fraseElement) {
+        fraseElement = document.createElement('div');
+        fraseElement.className = 'frase-motivacional-print';
+        document.querySelector('.izquierda').appendChild(fraseElement);
+    }
+   
+    let textoFrase = '';
+    if (actividadLabel) {
+        textoFrase += `<strong>${actividadLabel}:</strong> `;
+    }
+    textoFrase += mensajeMotivacional;
+    
+    fraseElement.innerHTML = textoFrase;
+    
+
+    fraseElement.style.display = 'block';
+    fraseElement.style.visibility = 'visible';
+    
+    console.log('Preparando para imprimir...');
+    console.log('Frase motivacional:', textoFrase);
+    
+    const afterPrint = () => {
+
+        fraseElement.style.display = 'none';
+        fraseElement.style.visibility = 'hidden';
+        
+        window.removeEventListener('afterprint', afterPrint);
+    };
+    
+    window.addEventListener('afterprint', afterPrint);
+
     window.print();
+
 });
 
-
-// ----------------------------------------------------
-// INICIALIZACIÓN DE PLATILLOS Y ARRANQUE
-// ----------------------------------------------------
 
 /**
  * Inicializa los listeners de los botones de platillo.
@@ -355,14 +391,10 @@ function inicializarBotonesPlatillos() {
 }
 
 
-// INICIALIZACIÓN FINAL DEL SCRIPT
 cargarIngredientes();
 inicializarCalculoCalorias(); 
 inicializarBotonesPlatillos();
 
-// **********************************************
-// 🌟 CORRECCIÓN 2: Guardado Automático al Recargar
-// **********************************************
 // Asegura que los últimos cambios se guarden antes de que el usuario cierre o recargue.
 window.addEventListener('beforeunload', () => {
     guardarPlatillo();
