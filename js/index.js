@@ -1,32 +1,109 @@
-/*(async () => { 
-    const url = 'https://open-weather13.p.rapidapi.com/fivedaysforcast?latitude=40.730610&longitude=-73.935242&lang=EN&mode=jason';
-    const options = {
-        method: 'GET',
-        headers: {
-            'x-rapidapi-key': 'ee35e6d244mshfa697c005a909ffp19edd6jsnb50d1224b706',
-            'x-rapidapi-host': 'open-weather13.p.rapidapi.com'
-        }
-    };
 
-    try {
-        const respuesta = await fetch(url, options);
-        const resultado = await respuesta.text();
-        console.log(resultado);
-    } catch (error) {
-        console.error(error);
-    }
-})(); */
-
-const options = {
-    method: 'GET',
-    headers: {                  //cambiar esto
-        "x-rapidapi-key": "ee35e6d244mshfa697c005a909ffp19edd6jsnb50d1224b706",
-        "x-rapidapi-host": "open-weather13.p.rapidapi.com"
-    }
+//Codigo para busqueda de AJAX con las operaciones  
+//URL base 
+const API_BASE = "http://www.nutrilink.com/api"; 
+ 
+// utilidades 
+function qs(sel, parent = document) { return parent.querySelector(sel); } 
+function qsa(sel, parent = document) { return [...parent.querySelectorAll(sel)]; } 
+ 
+// cliente 
+async function apiRequest(endpoint, options = {}) { 
+ 
+    const url = `${API_BASE}${endpoint.startsWith("/") ? endpoint : "/" + endpoint}`; 
+ 
+    const config = { 
+        method: options.method || "GET", 
+        headers: { 
+            "Content-Type": "application/json", 
+            ...(options.headers || {}) 
+        } 
+    }; 
+ 
+    if (options.body) { 
+        config.body = JSON.stringify(options.body); 
+    } 
+ 
+    try { 
+        const res = await fetch(url, config); 
+        const text = await res.text(); 
+ 
+        if (!res.ok) { 
+            throw new Error(`HTTP ${res.status} → ${text}`); 
+        } 
+ 
+        try { 
+            return JSON.parse(text); 
+        } catch { 
+            return null; 
+        } 
+ 
+    } catch (err) { 
+        console.error("Error", err); 
+        throw err; 
+    } 
+} 
+ 
+// metodos 
+const api = { 
+    get: (endpoint) => apiRequest(endpoint), 
+    post: (endpoint, body) => apiRequest(endpoint, { method: "POST", body }), 
+    put: (endpoint, body) => apiRequest(endpoint, { method: "PUT", body }), 
+    delete: (endpoint) => apiRequest(endpoint, { method: "DELETE" }) 
+}; 
+ 
+// ingredientes 
+async function apiGetIngredientes() { 
+    return await api.get("/ingredientes"); 
+} 
+ 
+// platillos 
+async function apiGetPlatillos() { 
+    return await api.get("/platillos"); 
+} 
+ 
+// Guardar platillo (según el PDF) 
+async function apiPostPlatillo(nombre, ingredientesArray) { 
+    return await api.post("/platillos", { 
+        nombre: nombre, 
+        ingredientes: ingredientesArray 
+    }); 
+} 
+ 
+// buscar por nombre 
+async function apiBuscarPlatillo(nombre) { 
+    return await api.get(`/platillos/byname?name=${encodeURIComponent(nombre)}`); 
+} 
+ 
+// calcular kcal 
+async function apiCalcularKcal(id) { 
+    return await api.post(`/platillos/${id}/calcular-kcal`); 
+} 
+ 
+async function apiCalcularIntake(data) { 
+    return await api.post("/calcular-kcal-intake", data); 
 }
-            //respuesta en json
-fetch('https://open-weather13.p.rapidapi.com/fivedaysforcast?latitude=40.730610&longitude=-73.935242&lang=EN&mode=jason', options)
-    .then(response => response.json())
-    .then(response => console.log(response))
-    .catch(err => console.error(err));
+
+
+//Codigo para controlar los platillos y buscarlos
+//sistema de platillos 
+async function guardarPlatillo(platilloActual, platillos) { 
+ 
+    const ingredientes = platillos[platilloActual].map(i => i.nombre); 
+ 
+    if (ingredientes.length === 0) { 
+        alert("No puedes guardar un platillo vacío."); 
+        return; 
+    } 
+ 
+    const nombre = `Platillo ${platilloActual}`; 
+ 
+    try { 
+        const res = await apiPostPlatillo(nombre, ingredientes); 
+        alert("Platillo guardado con éxito."); 
+    } catch (err) { 
+        alert("Error al guardar el platillo."); 
+        console.error(err); 
+    } 
+} 
 
